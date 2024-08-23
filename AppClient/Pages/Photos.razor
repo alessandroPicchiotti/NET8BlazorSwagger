@@ -1,0 +1,66 @@
+﻿@page "/Photos/{idAlbum:int}"
+@using AppClient.Class
+@using BaseLibrary.Entities
+@inject NavigationManager nav
+@using Microsoft.Extensions.Options
+@inject IOptionsMonitor<MyAppSettings> sett
+
+@if (photo == null)
+{
+    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+
+}
+else
+{
+    <h3>Photos</h3>
+    <MudGrid>
+    @foreach (var item in photo)
+    {
+            <MudItem xs="12" sm="6">
+                <MudCard>
+                    <MudCardMedia Image="@item.thumbnailUrl" Height="150" Style="width:150px;"/>
+                    <MudCardContent>
+                        <MudText Typo="Typo.h5">@item.title</MudText>
+                        <MudText Typo="Typo.body2">Album @item.albumId </MudText>
+                        <MudText Typo="Typo.body2">CidoceFoto @item.id</MudText>
+                
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudExpansionPanels MultiExpansion="true">
+                            <MudExpansionPanel Text="Apri la foto">
+                                <MudImage Src="@item.url" Alt="@item.title" Elevation="25" Class="rounded-lg" />
+                            </MudExpansionPanel>
+                        </MudExpansionPanels>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+    }
+    </MudGrid>
+    <MudButton Variant="Variant.Filled" OnClick="ReturnAlbums">Torna agli album</MudButton>
+    <MudElement HtmlTag="a"
+                Class="ms-1"
+                Style="color:red;font-weight:bold;">
+        Codice Album:@idAlbum
+    </MudElement>
+}
+@code {
+
+    [Parameter]
+    public int idAlbum { get; set; } = 0;
+
+    public Photo[]? photo;
+    private HttpClient http = new();
+    protected override void OnInitialized()
+    {
+
+        Console.WriteLine($"l'albuma cliccato e':{idAlbum}");
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        photo = await http.GetFromJsonAsync<Photo[]>($"{sett.CurrentValue.UrlAlbums}/{idAlbum}/Photos");
+    }
+    private void ReturnAlbums()
+    {
+        nav.NavigateTo("/Albums", false);
+    }
+}

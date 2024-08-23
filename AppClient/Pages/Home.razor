@@ -1,0 +1,32 @@
+﻿@page "/"
+@using AppClient.Services.Interfaces
+@inject IUserService serv;
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<PageTitle>Post</PageTitle>
+
+<div Class="d-flex justify-space-around flex-wrap mt-4">
+    <MudBadge Content="3" Overlap="true" Class="mx-6 my-4">
+        <MudIcon Icon="@Icons.Material.Filled.Email" Color="Color.Default" />
+    </MudBadge>
+    <MudBadge Content="100" Color="Color.Primary" Overlap="true" Class="mx-6 my-4">
+        <MudIcon Icon="@Icons.Material.Filled.Email" Color="Color.Default" />
+    </MudBadge>
+    <MudBadge Icon="@Icons.Material.Filled.Lock" Color="Color.Error" Overlap="true" Bordered="true" Class="mx-6 my-4">
+        <MudButton Color="Color.Error" Variant="Variant.Filled" DropShadow="false">Security Issues</MudButton>
+    </MudBadge>
+    <MudBadge Dot="true" Color="Color.Info" Class="mx-6 my-4">
+        <MudText>Bug Reports</MudText>
+    </MudBadge>
+</div>
+
+<MudButton Variant="Variant.Filled">Default</MudButton>
+<MudButton Variant="Variant.Filled" Color="Color.Primary">Primary</MudButton>
+<MudButton Variant="Variant.Filled" Color="Color.Secondary">Secondary</MudButton>
+
+<MudField Label="Numero utenti letti">@serv.Totale</MudField>
+

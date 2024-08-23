@@ -1,0 +1,43 @@
+﻿@page "/Users-Edit"
+@using AppClient.Model
+@using System.ComponentModel.DataAnnotations
+
+<h3>Modifica l'utente'</h3>
+
+<EditForm  Model="@userModel.user" OnValidSubmit="HandleValidSubmit" >
+    <DataAnnotationsValidator />
+    <hr />
+    <ValidationSummary />
+    <div class="form-group row">
+        <label for="user.username" class="col-sm-2 col-form-label">
+            First Name
+        </label>
+        <div class="col-sm-10">
+            <InputText id="user.username" class="form-control" placeholder="username"
+                       @bind-Value="userModel.user.username" />
+            <ValidationMessage For="@(() => userModel.user.username)" />
+
+          
+        </div>
+    </div>
+   <button type="submit">Conferma</button>
+   @if(outPut != null){
+       <InputTextArea id="result" @bind-Value="@outPut"></InputTextArea>
+   }
+</EditForm>
+<InputFile>upload file</InputFile>
+
+
+@code {
+    private UserModel userModel = new();
+    
+    private string outPut="";
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+    private void HandleValidSubmit() //Se gli static validation danno esito positivo vado con la valorizzazione della stringa
+    {
+        this.outPut = $"kdsadk sadkaskd asd dsa{userModel.user.username}";
+    }
+}

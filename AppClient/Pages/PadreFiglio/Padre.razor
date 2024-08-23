@@ -1,0 +1,26 @@
+﻿
+@page "/Padre"
+
+<h3>Padre</h3>
+
+<FiglioComponent title="Titolo dal padre"  onclickCallback="eventoCheMiRitoenaInsietro">
+    <ChildContent>
+        <ul>
+            <li>Numero primo</li>
+            <li>Numero Secondo</li>
+
+        </ul>
+    </ChildContent>
+    </FiglioComponent>
+   
+    @msg
+
+@code {
+    public string msg { get; set; } = string.Empty;
+    private void eventoCheMiRitoenaInsietro (MouseEventArgs e)
+    {
+        msg = $"Messaggio con cordinae di ritorno{e.ClientY} + {e.ClientX}";
+    }
+
+
+}

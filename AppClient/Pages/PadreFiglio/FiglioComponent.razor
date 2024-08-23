@@ -1,0 +1,23 @@
+﻿
+<h3>Figlio</h3>
+<p>Il titolo è: @Title</p>
+
+
+<MudButton Variant="Variant.Text" OnClick="onclickCallback">Clikkami!!!</MudButton>
+
+<p>
+    <p>Inizio codice HTML passato al padre</p>
+    @ChildContent
+</p>
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "";
+    [Parameter]
+    public RenderFragment ?ChildContent { get; set; }
+    [Parameter]
+    public EventCallback<MouseEventArgs> onclickCallback { get; set; }
+    public EventCallback<String> onclickReturnValue { get; set; }
+
+
+}

@@ -1,0 +1,72 @@
+﻿@page "/Dictionary"
+<h3>Dictionary</h3>
+@using AppClient.Class 
+@using Microsoft.Extensions.Options
+@inject IOptionsMonitor<MyAppSettings> mSetting2
+
+@if(!string.IsNullOrEmpty(msgAlert)){
+    <MudAlert Severity="Severity.Error" Variant="Variant.Filled">@msgAlert</MudAlert>
+}
+
+<MudGrid Spacing="2" Justify="Justify.FlexStart">
+    <MudItem>
+        <MudTextField Class="py-4 d-flex flex-1" @bind-Value="TextValue" Label="Inserisci una parola" Variant="Variant.Text"  ></MudTextField>
+    </MudItem>
+    <MudItem>
+        <MudButton Variant="Variant.Text" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary" Class="pa-10" @onclick="sendWord">Invia</MudButton>
+    </MudItem>    
+</MudGrid>
+
+@if (parolaSel != null)
+{
+    <MudCard>
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h6">@parolaSel</MudText>
+            </CardHeaderContent>
+            <CardHeaderActions>
+                <MudText Typo="Typo.h6">Definizioni</MudText>
+            </CardHeaderActions>
+        </MudCardHeader>
+        @foreach (var item in primoDic?.meanings[0].definitions){
+            <MudCardContent>
+                <MudText>@item.definition</MudText>
+                <MudText Typo="Typo.body2">@item.example</MudText>
+            </MudCardContent>
+        }
+        
+    </MudCard>
+}
+
+
+@code {
+    //private string visible, hidden;
+    private AppClient.Class.Dictionary[] ?dizionario;
+    private AppClient.Class.Dictionary? primoDic;
+    private string parolaSel = "";
+    private string msgAlert = "";
+    HttpClient http = new();
+    public string TextValue { get; set; } = "";
+
+    private async Task sendWord()
+    {
+        if (!string.IsNullOrEmpty(TextValue))
+        {
+            dizionario = await http.GetFromJsonAsync<AppClient.Class.Dictionary[]>($"{mSetting2.CurrentValue.UrlDictonary}{TextValue}");
+            //dizionario = null;
+            Console.WriteLine("valore:" + dizionario?.Length);
+            if (dizionario?.Length > 0)
+            {
+                parolaSel = $" la parola selazionata :{dizionario[0].word})";
+                primoDic = dizionario[0];
+            }
+        }
+        else
+        {
+            msgAlert = "Inserire una parola";
+
+        }
+
+
+    }
+}

@@ -1,0 +1,46 @@
+﻿@page "/myalbum"
+@using AppClient.Class
+@using Microsoft.Extensions.Options
+@inject IOptionsMonitor<MyAppSettings> mSetting2
+
+<MudDataGrid Items="@Photos" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+    <Columns>
+        <PropertyColumn Property="x => x.id" />
+        <PropertyColumn Property="x => x.albumId" />
+        <PropertyColumn Property="x => x.title" Title="Title" />        
+        <TemplateColumn CellClass="d-flex justify-end">
+            <CellTemplate >
+                <MudStack Row>
+                    <MudImage Src="@context.Item.url" Alt="Mony the dog" Elevation="25" Class="rounded-lg" />
+                    <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary">Hire</MudButton>
+                </MudStack>
+            </CellTemplate>
+        </TemplateColumn>
+    </Columns>
+</MudDataGrid>
+
+
+@code {
+    //
+    // public record Photo(string albumId, int id, string title, string Url, string thumbnailUrl);
+    public class Photo{
+        public int albumId { get; set; }
+        public int id { get; set; }
+        public string title { get; set; }
+        public string url { get; set; }
+        public string thumbnailUrl { get; set; }
+    }
+
+    public IEnumerable<Photo>? Photos = new List<Photo>();
+    private HttpClient http = new HttpClient();
+    protected override async Task OnInitializedAsync()
+    {
+        this.Photos = await http.GetFromJsonAsync<List<Photo>>($"{mSetting2.CurrentValue.Url}photos");
+        //Console.WriteLine(Photos[0]);
+
+        //GetFromJsonAsAsyncEnumerable<Photo>($"{mSetting2.CurrentValue.Url}photos");
+        //return base.OnInitializedAsync();
+    }
+
+
+}

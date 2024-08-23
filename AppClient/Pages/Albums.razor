@@ -1,0 +1,41 @@
+﻿@page "/Albums"
+@using AppClient.Class
+@using BaseLibrary.Entities
+@using Microsoft.Extensions.Options
+@inject IOptionsMonitor<MyAppSettings> mSetting
+@inject NavigationManager NavigationManager
+
+    @if (albums == null)
+    {
+        <MudProgressCircular Color="Color.Info" Indeterminate="true" />
+    }
+    else
+    {
+    <h3>Albums</h3>
+    <MudGrid>
+        @foreach (var item in albums)
+        {
+        
+        <MudItem xs="12" sm="6" md="3">
+                <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">@(item.title + " Codice" + item.id)</MudPaper>
+                <MudButton Variant="Variant.Outlined" OnClick="@(() => apriAlbum(item.id.ToString()))" Color="Color.Primary" id="@item.id">Gurada le foto</MudButton>
+        </MudItem>
+        }
+    </MudGrid>
+    }
+@code {
+    private Album[] ?albums;
+    private HttpClient http = new() ;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //await Task.Delay(10000);
+        albums = await http.GetFromJsonAsync<Album[]>($"{mSetting.CurrentValue.UrlAlbums}");
+
+    }
+    private void apriAlbum(string idAlbum)
+    {
+        Console.WriteLine(idAlbum);
+        NavigationManager.NavigateTo($"/Photos/{idAlbum}",false);
+    }
+}

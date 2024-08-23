@@ -1,0 +1,15 @@
+﻿@page "/todos"
+
+<p>ciao sono tudos</p>
+
+<MudAvatar Color="Color.Primary">M</MudAvatar>
+<MudAvatar Color="Color.Secondary">U</MudAvatar>
+<MudAvatar Color="Color.Tertiary">D</MudAvatar>
+
+<input @bind="text" @bind:event="oninput" />
+<p>@text</p>
+@code{
+
+    private string gatto{ get; set; }
+    string text;
+}

@@ -1,0 +1,6 @@
+@ApiNet8ConSwagger_HostAddress = http://localhost:5296
+
+GET {{ApiNet8ConSwagger_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

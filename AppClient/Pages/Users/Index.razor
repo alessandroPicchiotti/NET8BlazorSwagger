@@ -1,0 +1,21 @@
+﻿@page "/Users-Index"
+@using AppClient.Services.Interfaces
+@using BaseLibrary.Entities
+@inject IUserService userServ
+
+    <h3>Lista utenti</h3>
+    @if(users != null)
+    {
+        foreach (var item in users)
+        {
+            <p>@item.username</p>
+        }
+    }
+
+@code {
+    private IList<User> ?users;
+    protected override async Task OnInitializedAsync()
+    {
+        users = await userServ.GetUsers();
+    }
+}

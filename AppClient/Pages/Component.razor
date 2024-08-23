@@ -1,0 +1,83 @@
+﻿@page "/Component"
+@using BaseLibrary.DTOs
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration configuration
+@using Class
+@using Microsoft.Extensions.Options
+@inject IOptionsMonitor<MyAppSettings> mSetting2
+@* @inject IOptionsSnapshot<MyAppSettings> mSetting *@
+
+
+<PageTitle>Blazor</PageTitle>
+
+<h1>Ciao sono blazor</h1>
+
+
+<input type="text" @bind="strMsg" @bind:event="oninput" />
+<MudAlert Severity="Severity.Normal" Variant="Variant.Filled">@strMsg</MudAlert>
+<label>@strMsg</label>
+
+<button @onclick="FetchData">@LabelButton</button>
+
+<MudButton 
+           Target="_blank"
+           Variant="Variant.Filled"
+           EndIcon="@Icons.Custom.Brands.GitHub"
+           Color="Color.Primary" @onclick="FetchData">
+    GitHub Link
+</MudButton>
+<div class="row">
+    @if (user != null)
+    {
+
+        <label>@user.title</label>
+        <label>@user.userId</label>
+        <label>@user.id</label>
+
+    }
+    else
+    {
+        <label>@load</label>
+        
+    }
+</div>
+
+@code {
+
+    private int currentCount = 0;
+    private string LabelButton = "Carica gli utenti";
+    private string strMsg = "Cane";
+    private string load = "Nessun Utente caricato.";
+    private HttpClient http = new HttpClient();
+    private UtentePlace? user;
+
+
+    private async Task FetchData()
+    {
+        load = "Loading...........";
+        //https://jsonplaceholder.typicode.com/        
+        //user = await http.GetFromJsonAsync<UtentePlace>($"{configuration.GetSection("UrlAppPlaceHolderBase").Value}todos/{Math.Max(1, currentCount)}");
+        user = await http.GetFromJsonAsync<UtentePlace>($"{mSetting2.CurrentValue.Url}todos/{currentCount + 1}");
+        currentCount++;
+        LabelButton = "Carica il prox";
+    }
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Console.WriteLine("Eccomiiiii");
+        //Console.WriteLine(configuration.GetSection("UrlAppPlaceHolderBase").Value);
+        Console.WriteLine(mSetting2.CurrentValue.Url);
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        if (firstRender)
+        {
+            Console.WriteLine("Primo");
+            load = "";
+            LabelButton = "Carica gli utenti";
+        }
+        Console.WriteLine("Secondo");
+    }
+}
